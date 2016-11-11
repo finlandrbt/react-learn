@@ -8,7 +8,7 @@ class AnswerMultipleChoiceQuestion extends Component {
 
     renderChoices() {
         return this.props.choices.map(function(choice) {
-            return <AnswerRadioInput key={choice.key} title={choice.choice} />
+            return <AnswerRadioInput name={choice.name} key={choice.key} title={choice.choice} checked={choice.checked}/>
         });
     }
 
