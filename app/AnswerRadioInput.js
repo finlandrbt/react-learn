@@ -6,6 +6,13 @@ class AnswerRadioInput extends Component {
         super(props);
         this.state = {checked: this.props.checked}
     }
+    handleChanged(e) {
+        var checked = e.target.checked;
+        this.setState({checked: checked});
+        if (checked) {
+            this.props.onChanged(e.target.value);
+        }
+    }
     render() {
         return (
             <div>
@@ -14,7 +21,8 @@ class AnswerRadioInput extends Component {
                     name={this.props.name}
                     id={this.props.id}
                     value={this.props.value}
-                    defaultChecked={this.state.checked} />
+                    defaultChecked={this.state.checked} 
+                    onChange={this.handleChanged.bind(this)} />
                 &nbsp;{this.props.title}
                 </label>
             </div>
