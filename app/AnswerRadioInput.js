@@ -1,33 +1,52 @@
-import React, {Component} from 'react';
-import styles from './AnswerRadioInput.css'
+var React = require("react");
+var uniqueId = require('lodash-node/modern/utility/uniqueId');
 
-class AnswerRadioInput extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {checked: this.props.checked}
-    }
-    handleChanged(e) {
+var AnswerRadioInput = React.createClass({
+    propTypes: {
+        id: React.PropTypes.string,
+        name: React.PropTypes.string.isRequired,
+        label: React.PropTypes.string.isRequired,
+        value: React.PropTypes.string.isRequired,
+        checked: React.PropTypes.bool,
+        onChanged: React.PropTypes.func.isRequired
+    },
+    handleChanged: function(e) {
         var checked = e.target.checked;
         this.setState({checked: checked});
         if (checked) {
-            this.props.onChanged(e.target.value);
+            this.props.onChanged(this.props.value);
         }
-    }
-    render() {
+    },
+    getDefaultProps: function() {
+        return {
+            id: null,
+            checked: false
+        }
+    },
+    getInitialState: function() {
+        var id = this.props.id ? this.props.id : uniqueId('radio-');
+        return {
+            checked: !!this.props.checked,
+            id: id,
+            name: id
+        };
+    },
+    render: function() {
         return (
-            <div>
-                <label htmlFor={this.props.id} className={styles.radio}>
-                <input type="radio"
+            <div className="radio">
+            <label htmlFor={this.props.id}>
+                <input type="radio" 
                     name={this.props.name}
                     id={this.props.id}
                     value={this.props.value}
-                    defaultChecked={this.state.checked} 
-                    onChange={this.handleChanged.bind(this)} />
-                &nbsp;{this.props.title}
-                </label>
+                    checked={this.state.checked} 
+                    onChange={this.handleChanged}
+                />
+            {this.props.label}
+            </label>
             </div>
         );
     }
-};
+});
 
-export default AnswerRadioInput
+module.exports = AnswerRadioInput;

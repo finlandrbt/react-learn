@@ -1,38 +1,48 @@
-import React, {Component} from 'react';
-import AnswerRadioInput from './AnswerRadioInput'
+var React = require('react');
+var uniqueId = require('lodash-node/modern/utility/uniqueId');
+var AnswerRadioInput = React.createFactory(require('./AnswerRadioInput'));
 
-class AnswerMultipleChoiceQuestion extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {value: ""};
-    }
-
-    handleChanged(value) {
-        var obj = document.getElementById(value);
-        console.log(obj);
-    }
-
-    renderChoices(handle) {
-        return this.props.choices.map(function(choice) {
-            return <AnswerRadioInput 
-                id={choice.value}
-                name={choice.name} 
-                value={choice.value} 
-                key={choice.key} 
-                title={choice.choice} 
-                checked={choice.checked} 
-                onChanged={handle} />
-        });
-    }
-
-    render() {
+var AnswerMultipleChoiceQuestion = React.createClass({
+    propTypes: {
+        value: React.PropTypes.string,
+        choices: React.PropTypes.array.isRequired,
+        onCompleted: React.PropTypes.func.isRequired
+    },
+    getInitialState: function() {
+        return {
+            id: uniqueId('multiple-choice-'),
+            value: this.props.value
+        };
+    },
+    handleChanged: function(value) {
+        this.setState({value: value});
+        this.props.onCompleted(value);
+    },
+    renderChoices: function() {
+        return this.props.choices.map(function(choice, i) {
+            return AnswerRadioInput({
+                key: i,
+                id: "choice-" + i,
+                name: this.state.id,
+                label: choice,
+                value: choice,
+                checked: this.state.value === choice,
+                onChanged: this.handleChanged
+            });
+        }.bind(this));
+    },
+    render: function() {
         return (
             <div>
-            <label htmlFor={this.props.id}>{this.props.label}</label>
-            <div>{this.renderChoices(this.handleChanged.bind(this))}</div>
+                <label>
+                {this.props.label}
+                </label>
+                <div>
+                {this.renderChoices()}
+                </div>
             </div>
         );
     }
-}
+});
 
-export default AnswerMultipleChoiceQuestion
+module.exports = AnswerMultipleChoiceQuestion;

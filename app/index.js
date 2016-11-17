@@ -1,13 +1,16 @@
-import React from 'react';
-import {render} from 'react-dom';
+var React = require('react');
+var ReactDom = require('react-dom');
+var AnswerMultipleChoiceQuestion = React.createFactory(require('./AnswerMultipleChoiceQuestion'));
 
-import AnswerMultipleChoiceQuestion from './AnswerMultipleChoiceQuestion'
-import DoodleArea from './DoodleArea'
+var config = {
+    "choices":["容易", "一般", "困难"], 
+    "value":"A1", 
+    "label":"Question 1: React好学吗？", 
+    "id":"Q1", 
+    "onCompleted": function(value) { console.log(value); }
+};
 
-var choices = [
-    {choice: "Answer.1", name:"name", value:1, key: 1, checked: true}, 
-    {choice: "Answer.2", name:"name", value:2, key: 2, checked: false}
-]
-render(<AnswerMultipleChoiceQuestion choices={choices} label="Question.1" id="Q1" />, document.getElementById('radio'));
-
-render(<DoodleArea />, document.getElementById('doodlearea'));
+ReactDom.render(
+    React.createElement(AnswerMultipleChoiceQuestion, config),
+    document.getElementById('radio')
+);
