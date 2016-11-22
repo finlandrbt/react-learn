@@ -49,13 +49,19 @@
 	var React = __webpack_require__(1);
 	var ReactDom = __webpack_require__(34);
 	var AnswerMultipleChoiceQuestion = React.createFactory(__webpack_require__(180));
+	var MyForm = React.createFactory(__webpack_require__(184));
 
-	var choices = ["A1", "A2", "A3"];
-	var config = { "choices": choices, "value": "A1", "label": "Q1", "id": "Q1" };
-	window.React = React;
-	ReactDom.render(React.createElement(AnswerMultipleChoiceQuestion, config),
-	//<AnswerMultipleChoiceQuestion choices={choices} value="A1" label="Question.1" id="Q1" />, 
-	document.getElementById('radio'));
+	var config = {
+	    "choices": ["容易", "一般", "困难"],
+	    "value": "容易",
+	    "label": "Question 1: React好学吗？",
+	    "id": "Q1",
+	    "onCompleted": function onCompleted(value) {}
+	};
+
+	ReactDom.render(React.createElement(AnswerMultipleChoiceQuestion, config), document.getElementById('radio'));
+
+	ReactDom.render(React.createElement(MyForm, {}), document.getElementById('from'));
 
 /***/ },
 /* 1 */
@@ -21597,7 +21603,8 @@
 
 	    propTypes: {
 	        value: React.PropTypes.string,
-	        choices: React.PropTypes.array.isRequired
+	        choices: React.PropTypes.array.isRequired,
+	        onCompleted: React.PropTypes.func.isRequired
 	    },
 	    getInitialState: function getInitialState() {
 	        return {
@@ -21605,14 +21612,20 @@
 	            value: this.props.value
 	        };
 	    },
+	    handleChanged: function handleChanged(value) {
+	        this.setState({ value: value });
+	        this.props.onCompleted(value);
+	    },
 	    renderChoices: function renderChoices() {
 	        return this.props.choices.map(function (choice, i) {
 	            return AnswerRadioInput({
+	                key: i,
 	                id: "choice-" + i,
 	                name: this.state.id,
 	                label: choice,
 	                value: choice,
-	                checked: this.state.value === choice
+	                checked: this.state.value == choice,
+	                onChanged: this.handleChanged
 	            });
 	        }.bind(this));
 	    },
@@ -21622,7 +21635,7 @@
 	            null,
 	            React.createElement(
 	                'label',
-	                null,
+	                { htmlFor: this.state.id },
 	                this.props.label
 	            ),
 	            React.createElement(
@@ -21705,7 +21718,15 @@
 	        name: React.PropTypes.string.isRequired,
 	        label: React.PropTypes.string.isRequired,
 	        value: React.PropTypes.string.isRequired,
-	        checked: React.PropTypes.bool
+	        checked: React.PropTypes.bool,
+	        onChanged: React.PropTypes.func.isRequired
+	    },
+	    handleChanged: function handleChanged(e) {
+	        var checked = e.target.checked;
+	        this.setState({ checked: checked });
+	        if (checked) {
+	            this.props.onChanged(this.props.value);
+	        }
 	    },
 	    getDefaultProps: function getDefaultProps() {
 	        return {
@@ -21724,15 +21745,16 @@
 	    render: function render() {
 	        return React.createElement(
 	            'div',
-	            { className: 'radio' },
+	            null,
 	            React.createElement(
 	                'label',
-	                { htmlFor: this.props.id },
+	                { htmlFor: this.state.id },
 	                React.createElement('input', { type: 'radio',
 	                    name: this.props.name,
 	                    id: this.props.id,
 	                    value: this.props.value,
-	                    checked: this.state.checked
+	                    checked: this.state.checked,
+	                    onChange: this.handleChanged
 	                }),
 	                this.props.label
 	            )
@@ -21741,6 +21763,48 @@
 	});
 
 	module.exports = AnswerRadioInput;
+
+/***/ },
+/* 184 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(1);
+
+	var MyForm = React.createClass({
+	    displayName: "MyForm",
+
+	    getInitialState: function getInitialState() {
+	        return {
+	            helloTo: "Hello World!"
+	        };
+	    },
+	    handleChange: function handleChange(event) {
+	        this.setState({
+	            helloTo: event.target.value
+	        });
+	    },
+	    submitHandler: function submitHandler(event) {
+	        event.preventDefault();
+	        alert(this.state.helloTo);
+	    },
+	    render: function render() {
+	        return React.createElement(
+	            "form",
+	            { onSubmit: this.submitHandler },
+	            React.createElement("input", { type: "text", value: this.state.helloTo, onChange: this.handleChange }),
+	            React.createElement("br", null),
+	            React.createElement(
+	                "button",
+	                { type: "submit" },
+	                "Speak"
+	            )
+	        );
+	    }
+	});
+
+	module.exports = MyForm;
 
 /***/ }
 /******/ ]);

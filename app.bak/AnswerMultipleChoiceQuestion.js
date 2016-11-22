@@ -26,7 +26,7 @@ var AnswerMultipleChoiceQuestion = React.createClass({
                 name: this.state.id,
                 label: choice,
                 value: choice,
-                checked: this.state.value === choice,
+                checked: this.state.value == choice,
                 onChanged: this.handleChanged
             });
         }.bind(this));
@@ -34,7 +34,7 @@ var AnswerMultipleChoiceQuestion = React.createClass({
     render: function() {
         return (
             <div>
-                <label>
+                <label htmlFor={this.state.id}>
                 {this.props.label}
                 </label>
                 <div>

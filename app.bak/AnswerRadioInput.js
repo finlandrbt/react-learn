@@ -11,7 +11,8 @@ var AnswerRadioInput = React.createClass({
         onChanged: React.PropTypes.func.isRequired
     },
     handleChanged: function(e) {
-        var checked = e.target.checked;
+        var sel = e.target;
+        var checked = sel.checked;
         this.setState({checked: checked});
         if (checked) {
             this.props.onChanged(this.props.value);
@@ -33,13 +34,14 @@ var AnswerRadioInput = React.createClass({
     },
     render: function() {
         return (
-            <div className="radio">
-            <label htmlFor={this.props.id}>
+            <div>
+            <label htmlFor={this.state.id}>
                 <input type="radio" 
+                    htmlFor={this.props.id}
                     name={this.props.name}
                     id={this.props.id}
                     value={this.props.value}
-                    checked={this.state.checked} 
+                    checked={this.state.checked}
                     onChange={this.handleChanged}
                 />
             {this.props.label}

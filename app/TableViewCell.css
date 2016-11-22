@@ -1,0 +1,36 @@
+body{
+    color: #333;
+}
+a{
+    text-decoration: none;
+}
+a:visited{
+    color: #333;
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: none;
+}
+a:active{
+    text-decoration: none;
+}
+img{
+    float: left;
+    width: 13rem;
+    height: 13rem;
+    padding-left: 2px;
+    padding-right: 10px;
+}
+div {
+    line-height: 130%;
+}
+.title {
+    height: 5rem;
+    font-size: 3rem;
+    font-style: bolder;
+}
+.desciptor {
+    height: 8rem;
+    font-size: 1.8rem;
+    color: gray;
+}
